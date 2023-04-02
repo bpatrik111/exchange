@@ -6,11 +6,26 @@ create database exchangedb with template=template0 owner=exchange;
 alter default privileges grant all on tables to exchange;
 alter default privileges grant all on sequences to exchange;
 
-create table currencies(
-currency_id integer primary key not null,
-symbol_from varchar(20) not null,
-symbol_to varchar(20) not null,
-rate integer not null,
+CREATE TABLE public.symbols
+(
+    symbol_id integer NOT NULL,
+    name "char"[] NOT NULL,
+    PRIMARY KEY (symbol_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.symbols
+    OWNER to exchange;
+
+CREATE TABLE public."convert"
+(
+    convert_id integer NOT NULL,
+    from_ "char"[] NOT NULL,
+    to_ "char"[] NOT NULL,
+    rate integer NOT NULL,
+    PRIMARY KEY (convert_id)
 );
 
-create sequence currencies increment 1 start 1;
+ALTER TABLE IF EXISTS public."convert"
+    OWNER to exchange;
